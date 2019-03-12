@@ -23,12 +23,13 @@
 		</td>
 	</tr>
 </table>
+<?php if ( 'mailgun' == mailster_option( 'deliverymethod' ) ) : ?>
 <div class="<?php echo ( ! $verified ) ? 'hidden' : '' ?>">
 <table class="form-table">
 	<tr valign="top">
 		<th scope="row"><?php esc_html_e( 'Sending Domain' , 'mailster-mailgun' ) ?></th>
 		<td>
-		<?php $domains = $this->get_sending_domains(); ?>
+		<?php $domains = $verified ? $this->get_sending_domains() : array(); ?>
 		<?php if ( is_wp_error( $domains ) ) : ?>
 			<div class="error inline"><p><strong><?php esc_html_e( 'Not able to get Sub Accounts. Make sure your API Key is allowed to read them! Mailster will use your Master Account.' , 'mailster-mailgun' ) ?></strong></p></div>
 		<?php else : ?>
@@ -49,6 +50,15 @@
 			<option value="smtp" <?php selected( mailster_option( 'mailgun_api' ), 'smtp' )?>>SMTP API</option>
 		</select>
 		<span class="description"><?php esc_html_e( 'Use the WEB API as it\'s most likly faster.', 'mailster-mailgun' ); ?></span>
+		</td>
+	</tr>
+	<tr valign="top">
+		<th scope="row"><?php esc_html_e( 'Endpoint' , 'mailster-mailgun' ) ?></th>
+		<td>
+		<select name="mailster_options[mailgun_endpoint]">
+			<option value="0" <?php selected( ! mailster_option( 'mailgun_endpoint' ) ) ?>><?php esc_html_e( 'Default', 'mailster-mailgun' ); ?></option>
+			<option value="eu" <?php selected( mailster_option( 'mailgun_endpoint' ), 'eu' )?>><?php esc_html_e( 'EU', 'mailster-mailgun' ); ?></option>
+		</select>
 		</td>
 	</tr>
 	<tr valign="top">
@@ -88,3 +98,21 @@
 	</tr>
 </table>
 </div>
+<?php else : ?>
+<input type="hidden" name="mailster_options[mailgun_domain]" value="<?php echo esc_attr( mailster_option( 'mailgun_domain' ) ) ?>">
+<input type="hidden" name="mailster_options[mailgun_api]" value="<?php echo esc_attr( mailster_option( 'mailgun_api' ) ) ?>">
+<input type="hidden" name="mailster_options[mailgun_endpoint]" value="<?php echo esc_attr( mailster_option( 'mailgun_endpoint' ) ) ?>">
+<input type="hidden" name="mailster_options[mailgun_smtp_port]" value="<?php echo esc_attr( mailster_option( 'mailgun_smtp_port' ) ) ?>">
+<input type="hidden" name="mailster_options[mailgun_smtp_login]" value="<?php echo esc_attr( mailster_option( 'mailgun_smtp_login' ) ) ?>">
+<input type="hidden" name="mailster_options[mailgun_smtp_password]" value="<?php echo esc_attr( mailster_option( 'mailgun_smtp_password' ) ) ?>">
+<input type="hidden" name="mailster_options[mailgun_track]" value="<?php echo esc_attr( mailster_option( 'mailgun_track' ) ) ?>">
+<input type="hidden" name="mailster_options[mailgun_tags]" value="<?php echo esc_attr( mailster_option( 'mailgun_tags' ) ) ?>">
+	<?php if ( $verified ) : ?>
+	<table class="form-table">
+		<tr valign="top">
+			<th scope="row">&nbsp;</th>
+			<td><div class="notice notice-warning inline"><p><strong><?php esc_html_e( 'Please save your settings to access further delivery options!', 'mailster-mailgun' ); ?></strong></p></div></td>
+		</tr>
+	</table>
+	<?php endif; ?>
+<?php endif; ?>

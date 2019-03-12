@@ -75,7 +75,7 @@ class MailsterMailgun {
 
 			$mailobject->mailer->Mailer = 'smtp';
 			$mailobject->mailer->SMTPSecure = $port == 465 ? 'ssl' : 'tls';
-			$mailobject->mailer->Host = 'smtp.mailgun.org';
+			$mailobject->mailer->Host = mailster_option( 'mailgun_endpoint' ) ? 'smtp.eu.mailgun.org' : 'smtp.mailgun.org';
 			$mailobject->mailer->Port = $port;
 			$mailobject->mailer->SMTPAuth = 'LOGIN';
 			$mailobject->mailer->Username = $username;
@@ -294,7 +294,8 @@ class MailsterMailgun {
 		$body = null;
 		$apikey = isset( $this->apikey ) ? $this->apikey : mailster_option( 'mailgun_apikey' );
 		$domain = isset( $this->domain ) ? $this->domain : mailster_option( 'mailgun_domain' );
-		$url = 'https://api.mailgun.net/v3/' . ($domain ? $domain . '/' : '') . $endpoint;
+		$mailgun_endpoint = mailster_option( 'mailgun_endpoint' ) ? 'https://api.eu.mailgun.net/v3/' : 'https://api.mailgun.net/v3/';
+		$url = $mailgun_endpoint . ($domain ? $domain . '/' : '') . $endpoint;
 
 		$headers = array(
 			'Authorization' => 'Basic ' . base64_encode( 'api:' . $apikey ),
@@ -305,6 +306,7 @@ class MailsterMailgun {
 		} elseif ( 'POST' == $method ) {
 			$boundary = base_convert( uniqid( 'boundary', true ), 10, 36 );
 
+			$attachments = false;
 			foreach ( $args as $key => $value ) {
 
 				if ( 'attachment' == $key ) {
@@ -471,7 +473,7 @@ class MailsterMailgun {
 
 				if ( isset( $options['mailgun_api'] ) && $options['mailgun_api'] == 'smtp' ) {
 					if ( function_exists( 'fsockopen' ) ) {
-						$host = 'smtp.mailgunmail.com';
+						$host = $options['mailgun_endpoint'] ? 'smtp.eu.mailgun.org' : 'smtp.mailgun.org';
 						$port = $options['mailgun_port'];
 						$conn = fsockopen( $host, $port, $errno, $errstr, 15 );
 
@@ -639,6 +641,7 @@ class MailsterMailgun {
 				'mailgun_apikey' => '',
 				'mailgun_api' => 'web',
 				'mailgun_domain' => null,
+				'mailgun_endpoint' => false,
 				'mailgun_smtp_port' => 587,
 				'mailgun_smtp_login' => 'postmaster',
 				'mailgun_smtp_password' => '',

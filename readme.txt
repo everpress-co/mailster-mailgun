@@ -1,9 +1,9 @@
 === Mailster Mailgun Integration ===
-Contributors: everpress, revaxarts
+Contributors: everpress
 Tags: mailgun, mailster, deliverymethod, newsletter, mailsteresp, email
 Requires at least: 3.8
-Tested up to: 4.8
-Stable tag: 1.0
+Tested up to: 5.1
+Stable tag: 1.2
 License: GPLv2 or later
 Author: EverPress
 Author URI: https://mailster.co
@@ -29,6 +29,14 @@ Read the [Setup Guide](https://kb.mailster.co/send-your-newsletters-via-mailgun/
 1. Option Interface.
 
 == Changelog ==
+
+= 1.2 =
+
+* fixed: Undefined variable notice
+
+= 1.1 =
+
+* added option to choose EU endpoint
 
 = 1.0 =
 * initial release
