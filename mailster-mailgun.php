@@ -12,7 +12,7 @@ License: GPLv2 or later
 
 
 define( 'MAILSTER_MAILGUN_VERSION', '1.2' );
-define( 'MAILSTER_MAILGUN_REQUIRED_VERSION', '2.2.10' );
+define( 'MAILSTER_MAILGUN_REQUIRED_VERSION', '2.4' );
 define( 'MAILSTER_MAILGUN_FILE', __FILE__ );
 
 require_once dirname( __FILE__ ) . '/classes/mailgun.class.php';

@@ -11,7 +11,7 @@ class MailsterMailgun {
 	public function __construct() {
 
 		$this->plugin_path = plugin_dir_path( MAILSTER_MAILGUN_FILE );
-		$this->plugin_url = plugin_dir_url( MAILSTER_MAILGUN_FILE );
+		$this->plugin_url  = plugin_dir_url( MAILSTER_MAILGUN_FILE );
 
 		register_activation_hook( MAILSTER_MAILGUN_FILE, array( &$this, 'activate' ) );
 		register_deactivation_hook( MAILSTER_MAILGUN_FILE, array( &$this, 'deactivate' ) );
@@ -70,16 +70,16 @@ class MailsterMailgun {
 		if ( $method == 'smtp' ) {
 
 			$username = mailster_option( 'mailgun_smtp_login' ) . '@' . mailster_option( 'mailgun_domain' );
-			$port = mailster_option( 'mailgun_smtp_port' );
+			$port     = mailster_option( 'mailgun_smtp_port' );
 			$password = mailster_option( 'mailgun_smtp_password' );
 
-			$mailobject->mailer->Mailer = 'smtp';
-			$mailobject->mailer->SMTPSecure = $port == 465 ? 'ssl' : 'tls';
-			$mailobject->mailer->Host = mailster_option( 'mailgun_endpoint' ) ? 'smtp.eu.mailgun.org' : 'smtp.mailgun.org';
-			$mailobject->mailer->Port = $port;
-			$mailobject->mailer->SMTPAuth = 'LOGIN';
-			$mailobject->mailer->Username = $username;
-			$mailobject->mailer->Password = $password;
+			$mailobject->mailer->Mailer        = 'smtp';
+			$mailobject->mailer->SMTPSecure    = $port == 465 ? 'ssl' : 'tls';
+			$mailobject->mailer->Host          = mailster_option( 'mailgun_endpoint' ) ? 'smtp.eu.mailgun.org' : 'smtp.mailgun.org';
+			$mailobject->mailer->Port          = $port;
+			$mailobject->mailer->SMTPAuth      = 'LOGIN';
+			$mailobject->mailer->Username      = $username;
+			$mailobject->mailer->Password      = $password;
 			$mailobject->mailer->SMTPKeepAlive = true;
 
 		} elseif ( $method == 'web' ) {
@@ -110,15 +110,19 @@ class MailsterMailgun {
 		$mailobject->mailgun_object = array();
 
 		if ( $tracking_options = mailster_option( 'mailgun_track' ) ) {
-			$open_tracking = 'opens' == $tracking_options || 'opens,clicks' == $tracking_options;
+			$open_tracking  = 'opens' == $tracking_options || 'opens,clicks' == $tracking_options;
 			$click_tracking = 'clicks' == $tracking_options || 'opens,clicks' == $tracking_options;
 		}
 
-		$data = base64_encode(json_encode(array(
-			'mailster_id' => mailster_option( 'ID' ),
-			'campaign_id' => $mailobject->campaignID,
-			'subscriber_id' => $mailobject->subscriberID,
-		)));
+		$data = base64_encode(
+			json_encode(
+				array(
+					'mailster_id'   => mailster_option( 'ID' ),
+					'campaign_id'   => $mailobject->campaignID,
+					'subscriber_id' => $mailobject->subscriberID,
+				)
+			)
+		);
 
 		if ( $tags = mailster_option( 'mailgun_tags', '' ) ) {
 			$tags = array_map( 'trim', explode( ',', $tags ) );
@@ -133,9 +137,9 @@ class MailsterMailgun {
 			}
 
 			if ( $tracking_options ) {
-				$mailobject->mailer->addCustomHeader( 'X-Mailgun-Track: ' . (($open_tracking || $click_tracking) ? 'yes' : 'no') );
-				$mailobject->mailer->addCustomHeader( 'X-Mailgun-Track-Clicks: ' . ($click_tracking ? 'yes' : 'no') );
-				$mailobject->mailer->addCustomHeader( 'X-Mailgun-Track-Opens: ' . ($open_tracking ? 'yes' : 'no') );
+				$mailobject->mailer->addCustomHeader( 'X-Mailgun-Track: ' . ( ( $open_tracking || $click_tracking ) ? 'yes' : 'no' ) );
+				$mailobject->mailer->addCustomHeader( 'X-Mailgun-Track-Clicks: ' . ( $click_tracking ? 'yes' : 'no' ) );
+				$mailobject->mailer->addCustomHeader( 'X-Mailgun-Track-Opens: ' . ( $open_tracking ? 'yes' : 'no' ) );
 			}
 
 			$mailobject->mailer->addCustomHeader( 'X-Mailgun-Variables: ' . json_encode( array( 'Mailster' => $data ) ) );
@@ -145,7 +149,7 @@ class MailsterMailgun {
 			$recipients = '';
 
 			foreach ( $mailobject->to as $i => $to ) {
-				$recipients .= ($mailobject->to_name[ $i ] ? $mailobject->to_name[ $i ] . ' ' : '') . '<' . ($mailobject->to[ $i ] ? $mailobject->to[ $i ] : null) . '>';
+				$recipients .= ( $mailobject->to_name[ $i ] ? $mailobject->to_name[ $i ] . ' ' : '' ) . '<' . ( $mailobject->to[ $i ] ? $mailobject->to[ $i ] : null ) . '>';
 			}
 
 			if ( $tags ) {
@@ -153,16 +157,16 @@ class MailsterMailgun {
 			}
 
 			if ( $tracking_options ) {
-				$mailobject->mailgun_object['o:tracking'] = ($open_tracking || $click_tracking) ? 'yes' : 'no';
-				$mailobject->mailgun_object['o:tracking-opens'] = $open_tracking ? 'yes' : 'no';
+				$mailobject->mailgun_object['o:tracking']        = ( $open_tracking || $click_tracking ) ? 'yes' : 'no';
+				$mailobject->mailgun_object['o:tracking-opens']  = $open_tracking ? 'yes' : 'no';
 				$mailobject->mailgun_object['o:tracking-clicks'] = $click_tracking ? 'yes' : 'no';
 			}
 
-			$mailobject->mailgun_object['from'] = $mailobject->from_name . ' <' . $mailobject->from . '>';
-			$mailobject->mailgun_object['to'] = $recipients;
-			$mailobject->mailgun_object['text'] = $mailobject->mailer->AltBody;
-			$mailobject->mailgun_object['html'] = $mailobject->mailer->Body;
-			$mailobject->mailgun_object['subject'] = $mailobject->subject;
+			$mailobject->mailgun_object['from']       = $mailobject->from_name . ' <' . $mailobject->from . '>';
+			$mailobject->mailgun_object['to']         = $recipients;
+			$mailobject->mailgun_object['text']       = $mailobject->mailer->AltBody;
+			$mailobject->mailgun_object['html']       = $mailobject->mailer->Body;
+			$mailobject->mailgun_object['subject']    = $mailobject->subject;
 			$mailobject->mailgun_object['h:Reply-To'] = $mailobject->reply_to;
 
 			$mailobject->mailgun_object['v:Mailster'] = $data;
@@ -175,15 +179,15 @@ class MailsterMailgun {
 
 			if ( ! empty( $mailobject->attachments ) || $mailobject->embed_images ) {
 
-				$org_attachments = $mailobject->mailer->getAttachments();
+				$org_attachments                          = $mailobject->mailer->getAttachments();
 				$mailobject->mailgun_object['attachment'] = array();
 
 				foreach ( $org_attachments as $attachment ) {
 
 					$mailobject->mailgun_object['attachment'][] = array(
-						'content' => file_get_contents( $attachment[0] ),
+						'content'  => file_get_contents( $attachment[0] ),
 						'filename' => $attachment[1],
-						'type' => $attachment[6],
+						'type'     => $attachment[6],
 					);
 					if ( 'inline' == $attachment[6] ) {
 						$mailobject->mailgun_object['html'] = str_replace( '"cid:' . $attachment[7] . '"', '"cid:' . $attachment[1] . '"', $mailobject->mailgun_object['html'] );
@@ -290,12 +294,12 @@ class MailsterMailgun {
 	 */
 	private function do_call( $method, $endpoint, $args = array(), $timeout = 15 ) {
 
-		$args = wp_parse_args( $args, array() );
-		$body = null;
-		$apikey = isset( $this->apikey ) ? $this->apikey : mailster_option( 'mailgun_apikey' );
-		$domain = isset( $this->domain ) ? $this->domain : mailster_option( 'mailgun_domain' );
+		$args             = wp_parse_args( $args, array() );
+		$body             = null;
+		$apikey           = isset( $this->apikey ) ? $this->apikey : mailster_option( 'mailgun_apikey' );
+		$domain           = isset( $this->domain ) ? $this->domain : mailster_option( 'mailgun_domain' );
 		$mailgun_endpoint = mailster_option( 'mailgun_endpoint' ) ? 'https://api.eu.mailgun.net/v3/' : 'https://api.mailgun.net/v3/';
-		$url = $mailgun_endpoint . ($domain ? $domain . '/' : '') . $endpoint;
+		$url              = $mailgun_endpoint . ( $domain ? $domain . '/' : '' ) . $endpoint;
 
 		$headers = array(
 			'Authorization' => 'Basic ' . base64_encode( 'api:' . $apikey ),
@@ -343,12 +347,15 @@ class MailsterMailgun {
 			return new WP_Error( 'method_not_allowed', 'This method is not allowed' );
 		}
 
-		$response = wp_remote_request( $url, array(
-			'method' => $method,
-			'headers' => $headers,
-			'timeout' => $timeout,
-			'body' => $body,
-		) );
+		$response = wp_remote_request(
+			$url,
+			array(
+				'method'  => $method,
+				'headers' => $headers,
+				'timeout' => $timeout,
+				'body'    => $body,
+			)
+		);
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -405,7 +412,7 @@ class MailsterMailgun {
 	public function get_sending_domains() {
 
 		$this->domain = '';
-		$response = $this->do_get( 'domains' );
+		$response     = $this->do_get( 'domains' );
 		$this->domain = null;
 
 		if ( is_wp_error( $response ) ) {
@@ -453,7 +460,7 @@ class MailsterMailgun {
 
 		if ( $options['deliverymethod'] == 'mailgun' ) {
 
-			$old_apikey = mailster_option( 'mailgun_apikey' );
+			$old_apikey          = mailster_option( 'mailgun_apikey' );
 			$old_delivery_method = mailster_option( 'deliverymethod' );
 
 			if ( ! wp_next_scheduled( 'mailster_mailgun_cron' ) ) {
@@ -511,20 +518,24 @@ class MailsterMailgun {
 
 		$now = time();
 
-		if ( ! ($last_bounce_check = get_transient( '_mailster_mailgun_last_bounce_check' )) ) {
+		if ( ! ( $last_bounce_check = get_transient( '_mailster_mailgun_last_bounce_check' ) ) ) {
 			set_transient( '_mailster_mailgun_last_bounce_check', $now );
 			$last_bounce_check = $now;
 		}
 
-		$response = $this->do_get( 'events', array(
-			'begin' => date( 'r', $last_bounce_check ),
-			'event' => '(rejected OR failed OR unsubscribed OR complained)',
-			'limit' => 300,
-			'ascending' => 'yes',
-		), 30);
+		$response = $this->do_get(
+			'events',
+			array(
+				'begin'     => date( 'r', $last_bounce_check ),
+				'event'     => '(rejected OR failed OR unsubscribed OR complained)',
+				'limit'     => 300,
+				'ascending' => 'yes',
+			),
+			30
+		);
 
 		if ( is_wp_error( $response ) ) {
-			mailster_notice( sprintf( __( 'Not able to check bounces via Mailgun: %s', 'mailster-mailgun' ), $response->get_error_message() ) , 'error', false, 'mailster_mailgun_bounce_error' );
+			mailster_notice( sprintf( __( 'Not able to check bounces via Mailgun: %s', 'mailster-mailgun' ), $response->get_error_message() ), 'error', false, 'mailster_mailgun_bounce_error' );
 			return;
 		} else {
 			mailster_remove_notice( 'mailster_mailgun_bounce_error' );
@@ -559,7 +570,7 @@ class MailsterMailgun {
 			}
 
 			$is_hard_bounce = true;
-			$reason = $result->{'delivery-status'}->message;
+			$reason         = $result->{'delivery-status'}->message;
 
 			switch ( $result->event . '_' . $result->severity ) {
 				case 'rejected_':
@@ -599,10 +610,10 @@ class MailsterMailgun {
 	 */
 	public function section_tab_bounce() {
 
-?>
+		?>
 		<div class="error inline"><p><strong><?php _e( 'Bouncing is handled by Mailgun so all your settings will be ignored', 'mailster-mailgun' ); ?></strong></p></div>
 
-	<?php
+		<?php
 	}
 
 
@@ -614,13 +625,13 @@ class MailsterMailgun {
 	 * @return void
 	 */
 	public function notice() {
-?>
+		?>
 	<div id="message" class="error">
 	  <p>
-	   <strong>Mailgun integration for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_MAILGUN_REQUIRED_VERSION ?></strong>.
+	   <strong>Mailgun integration for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_MAILGUN_REQUIRED_VERSION; ?></strong>.
 	  </p>
 	</div>
-	<?php
+		<?php
 	}
 
 
@@ -638,16 +649,16 @@ class MailsterMailgun {
 			mailster_notice( sprintf( __( 'Change the delivery method on the %s!', 'mailster-mailgun' ), '<a href="edit.php?post_type=newsletter&page=mailster_settings&mailster_remove_notice=delivery_method#delivery">' . __( 'Settings Page', 'mailster-mailgun' ) . '</a>' ), '', false, 'delivery_method' );
 
 			$defaults = array(
-				'mailgun_apikey' => '',
-				'mailgun_api' => 'web',
-				'mailgun_domain' => null,
-				'mailgun_endpoint' => false,
-				'mailgun_smtp_port' => 587,
-				'mailgun_smtp_login' => 'postmaster',
+				'mailgun_apikey'        => '',
+				'mailgun_api'           => 'web',
+				'mailgun_domain'        => null,
+				'mailgun_endpoint'      => false,
+				'mailgun_smtp_port'     => 587,
+				'mailgun_smtp_login'    => 'postmaster',
 				'mailgun_smtp_password' => '',
-				'mailgun_track' => 0,
-				'mailgun_tags' => '',
-				'mailgun_verified' => false,
+				'mailgun_track'         => 0,
+				'mailgun_tags'          => '',
+				'mailgun_verified'      => false,
 			);
 
 			$mailster_options = mailster_options();
