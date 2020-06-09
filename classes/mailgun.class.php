@@ -403,7 +403,6 @@ class MailsterMailgun {
 	}
 
 
-
 	/**
 	 *
 	 * @access public
@@ -595,6 +594,7 @@ class MailsterMailgun {
 
 	public function subscriber_errors( $errors ) {
 		$errors[] = 'Message generation rejected';
+		$errors[] = '\'to\' parameter is not a valid address. please check documentation';
 		return $errors;
 	}
 

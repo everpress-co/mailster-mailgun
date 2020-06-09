@@ -2,8 +2,8 @@
 Contributors: everpress
 Tags: mailgun, mailster, deliverymethod, newsletter, mailsteresp, email
 Requires at least: 3.8
-Tested up to: 5.3
-Stable tag: 1.2
+Tested up to: 5.4
+Stable tag: 1.3
 License: GPLv2 or later
 Author: EverPress
 Author URI: https://mailster.co
@@ -30,12 +30,13 @@ Read the [Setup Guide](https://kb.mailster.co/send-your-newsletters-via-mailgun?
 
 == Changelog ==
 
-= 1.2 =
+= 1.3 =
+* added string for subscriber error
 
+= 1.2 =
 * fixed: Undefined variable notice
 
 = 1.1 =
-
 * added option to choose EU endpoint
 
 = 1.0 =
