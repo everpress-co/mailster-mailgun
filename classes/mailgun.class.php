@@ -308,7 +308,7 @@ class MailsterMailgun {
 		if ( 'GET' == $method ) {
 			$url = add_query_arg( $args, $url );
 		} elseif ( 'POST' == $method ) {
-			$boundary = base_convert( uniqid( 'boundary', true ), 10, 36 );
+			$boundary = hash( 'crc32', md5( uniqid( 'boundary', true ) ) );
 
 			$attachments = false;
 			foreach ( $args as $key => $value ) {
