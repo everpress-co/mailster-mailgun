@@ -45,6 +45,7 @@ class MailsterMailgun {
 				add_action( 'mailster_initsend', array( &$this, 'initsend' ) );
 				add_action( 'mailster_presend', array( &$this, 'presend' ) );
 				add_action( 'mailster_dosend', array( &$this, 'dosend' ) );
+				add_action( 'mailster_cron_bounce', array( &$this, 'check_bounces' ) );
 				add_action( 'mailster_check_bounces', array( &$this, 'check_bounces' ) );
 				add_action( 'mailster_section_tab_bounce', array( &$this, 'section_tab_bounce' ) );
 				add_filter( 'mailster_subscriber_errors', array( $this, 'subscriber_errors' ) );
@@ -82,7 +83,7 @@ class MailsterMailgun {
 			$mailobject->mailer->Password      = $password;
 			$mailobject->mailer->SMTPKeepAlive = true;
 
-		} elseif ( $method == 'web' ) {
+		} else {
 
 		}
 
@@ -114,15 +115,15 @@ class MailsterMailgun {
 			$click_tracking = 'clicks' == $tracking_options || 'opens,clicks' == $tracking_options;
 		}
 
-		$data = base64_encode(
-			json_encode(
-				array(
-					'mailster_id'   => mailster_option( 'ID' ),
-					'campaign_id'   => $mailobject->campaignID,
-					'subscriber_id' => $mailobject->subscriberID,
-				)
-			)
+		$data = array(
+			'mailster_id'   => mailster_option( 'ID' ),
+			'campaign_id'   => (string) $mailobject->campaignID,
+			'index'         => (string) $mailobject->index,
+			'subscriber_id' => (string) $mailobject->subscriberID,
 		);
+
+		$data = json_encode( $data );
+		$data = base64_encode( $data );
 
 		if ( $tags = mailster_option( 'mailgun_tags', '' ) ) {
 			$tags = array_map( 'trim', explode( ',', $tags ) );
@@ -144,7 +145,7 @@ class MailsterMailgun {
 
 			$mailobject->mailer->addCustomHeader( 'X-Mailgun-Variables: ' . json_encode( array( 'Mailster' => $data ) ) );
 
-		} elseif ( $method == 'web' ) {
+		} else {
 
 			$recipients = '';
 
@@ -219,7 +220,7 @@ class MailsterMailgun {
 			// use send from the main class
 			$mailobject->do_send();
 
-		} elseif ( $method == 'web' ) {
+		} else {
 
 			if ( ! isset( $mailobject->mailgun_object ) ) {
 				$mailobject->set_error( __( 'Mailgun options not defined', 'mailster-mailgun' ) );
@@ -411,7 +412,7 @@ class MailsterMailgun {
 	public function get_sending_domains() {
 
 		$this->domain = '';
-		$response     = $this->do_get( 'domains' );
+		$response     = $this->do_get( 'domains', 'limit=1000' );
 		$this->domain = null;
 
 		if ( is_wp_error( $response ) ) {
@@ -567,21 +568,26 @@ class MailsterMailgun {
 			} else {
 				$campaign_id = null;
 			}
+			if ( isset( $data->index ) ) {
+				$index = $data->index;
+			} else {
+				$index = null;
+			}
 
-			$is_hard_bounce = true;
-			$reason         = $result->{'delivery-status'}->message;
-
-			switch ( $result->event . '_' . $result->severity ) {
-				case 'rejected_':
-				case 'failed_permanent':
-					mailster( 'subscribers' )->bounce( $subscriber->ID, $campaign_id, $is_hard_bounce, $reason );
+			switch ( trim( $result->event . ' ' . $result->severity ) ) {
+				case 'rejected':
 					break;
-				case 'unsubscribed_':
-				case 'complained_':
-					mailster( 'subscribers' )->unsubscribe( $subscriber->ID, $campaign_id );
+				case 'failed permanent':
+					$reason      = trim( $result->{'delivery-status'}->message . ' ' . $result->{'delivery-status'}->description );
+					$hard_bounce = true;
+					mailster( 'subscribers' )->bounce( $subscriber->ID, $campaign_id, $hard_bounce, $reason );
 					break;
-				case 'failed_temporary':
+				case 'failed temporary':
 					// soft bounces are handled by Mailgun
+					break;
+				case 'unsubscribed':
+				case 'complained':
+					mailster( 'subscribers' )->unsubscribe( $subscriber->ID, $campaign_id, $result->event );
 					break;
 				default:
 					break;
@@ -646,7 +652,7 @@ class MailsterMailgun {
 
 		if ( function_exists( 'mailster' ) ) {
 
-			mailster_notice( sprintf( __( 'Change the delivery method on the %s!', 'mailster-mailgun' ), '<a href="edit.php?post_type=newsletter&page=mailster_settings&mailster_remove_notice=delivery_method#delivery">' . __( 'Settings Page', 'mailster-mailgun' ) . '</a>' ), '', false, 'delivery_method' );
+			mailster_notice( sprintf( __( 'Change the delivery method on the %s!', 'mailster-mailgun' ), '<a href="edit.php?post_type=newsletter&page=mailster_settings&mailster_remove_notice=delivery_method#delivery">' . __( 'Settings Page', 'mailster-mailgun' ) . '</a>' ), '', 360, 'delivery_method' );
 
 			$defaults = array(
 				'mailgun_apikey'        => '',
@@ -683,7 +689,7 @@ class MailsterMailgun {
 		if ( function_exists( 'mailster' ) ) {
 			if ( mailster_option( 'deliverymethod' ) == 'mailgun' ) {
 				mailster_update_option( 'deliverymethod', 'simple' );
-				mailster_notice( sprintf( __( 'Change the delivery method on the %s!', 'mailster-mailgun' ), '<a href="edit.php?post_type=newsletter&page=mailster_settings&mailster_remove_notice=delivery_method#delivery">Settings Page</a>' ), '', false, 'delivery_method' );
+				mailster_notice( sprintf( __( 'Change the delivery method on the %s!', 'mailster-mailgun' ), '<a href="edit.php?post_type=newsletter&page=mailster_settings&mailster_remove_notice=delivery_method#delivery">Settings Page</a>' ), '', 360, 'delivery_method' );
 			}
 		}
 	}
