@@ -3,7 +3,7 @@ Contributors: everpress
 Tags: mailgun, mailster, deliverymethod, newsletter, mailsteresp, email
 Requires at least: 3.8
 Tested up to: 5.8
-Stable tag: 1.4
+Stable tag: 1.5
 License: GPLv2 or later
 Author: EverPress
 Author URI: https://mailster.co
@@ -29,6 +29,9 @@ Read the [Setup Guide](https://kb.mailster.co/send-your-newsletters-via-mailgun?
 1. Option Interface.
 
 == Changelog ==
+
+= 1.5 =
+* Updated for Mailster 3.0
 
 = 1.4 =
 * fixed php Error notice on PHP >= 7.4

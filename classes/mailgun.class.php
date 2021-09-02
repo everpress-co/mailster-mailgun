@@ -580,14 +580,22 @@ class MailsterMailgun {
 				case 'failed permanent':
 					$reason      = trim( $result->{'delivery-status'}->message . ' ' . $result->{'delivery-status'}->description );
 					$hard_bounce = true;
-					mailster( 'subscribers' )->bounce( $subscriber->ID, $campaign_id, $hard_bounce, $reason );
+					if ( version_compare( MAILSTER_VERSION, '3.0', '<' ) ) {
+						mailster( 'subscribers' )->bounce( $subscriber->ID, $campaign_id, $hard_bounce, $reason );
+					} else {
+						mailster( 'subscribers' )->bounce( $subscriber->ID, $campaign_id, $hard_bounce, $reason, $index );
+					}
 					break;
 				case 'failed temporary':
 					// soft bounces are handled by Mailgun
 					break;
 				case 'unsubscribed':
 				case 'complained':
-					mailster( 'subscribers' )->unsubscribe( $subscriber->ID, $campaign_id, $result->event );
+					if ( version_compare( MAILSTER_VERSION, '3.0', '<' ) ) {
+						mailster( 'subscribers' )->unsubscribe( $subscriber->ID, $campaign_id, $result->event );
+					} else {
+						mailster( 'subscribers' )->unsubscribe( $subscriber->ID, $campaign_id, $result->event, $index );
+					}
 					break;
 				default:
 					break;
