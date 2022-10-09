@@ -1,6 +1,6 @@
 # Mailster Mailgun Integration
 
-Contributors: everpress  
+Contributors: everpress, xaverb  
 Tags: mailgun, mailster, deliverymethod, newsletter, mailsteresp, email  
 Requires at least: 3.8  
 Tested up to: 6.0  
@@ -9,11 +9,11 @@ License: GPLv2 or later
 
 ## Description
 
-> This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster&utm_medium=readme)
+> This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=readme&utm_term=Mailgun)
 
-Uses Mailgun to deliver emails for the [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster&utm_medium=readme).
+Uses Mailgun to deliver emails for the [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=readme&utm_term=Mailgun).
 
-Read the [Setup Guide](https://kb.mailster.co/send-your-newsletters-via-mailgun?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster&utm_medium=readme) to get started.
+Read the [Setup Guide](https://kb.mailster.co/send-your-newsletters-via-mailgun?utm_campaign=wporg&utm_source=Mailgun&utm_medium=readme) to get started.
 
 ## Installation
 
@@ -57,4 +57,4 @@ Read the [Setup Guide](https://kb.mailster.co/send-your-newsletters-via-mailgun?
 
 ## Additional Info
 
-This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster&utm_medium=readme)
+This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=readme&utm_term=Mailgun)

@@ -642,7 +642,7 @@ class MailsterMailgun {
 		?>
 	<div id="message" class="error">
 	  <p>
-	   <strong>Mailgun integration for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster&utm_medium=plugin">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_MAILGUN_REQUIRED_VERSION; ?></strong>.
+	   <strong>Mailgun integration for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=plugin&utm_term=Mailgun">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_MAILGUN_REQUIRED_VERSION; ?></strong>.
 	  </p>
 	</div>
 		<?php

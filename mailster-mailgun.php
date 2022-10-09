@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Mailster Mailgun Integration
-Plugin URI: https://mailster.co/?utm_campaign=wporg&utm_source=Mailster+Mailgun+Integration&utm_medium=plugin
+Plugin URI: https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=plugin&utm_term=Mailgun
 Description: Uses Mailgun to deliver emails for the Mailster Newsletter Plugin for WordPress.
 Version: 1.5
 Author: EverPress
