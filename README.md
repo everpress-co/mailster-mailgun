@@ -1,19 +1,19 @@
 # Mailster Mailgun Integration
 
-Contributors: everpress  
+Contributors: everpress, mailster, xaverb  
 Tags: mailgun, mailster, deliverymethod, newsletter, mailsteresp, email  
-Requires at least: 3.8  
-Tested up to: 5.9  
-Stable tag: 1.5  
+Requires at least: 6.0  
+Tested up to: 6.5  
+Stable tag: 1.5.1  
 License: GPLv2 or later
 
 ## Description
 
-> This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster&utm_medium=readme)
+> This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=readme&utm_term=Mailgun)
 
-Uses Mailgun to deliver emails for the [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster&utm_medium=readme).
+Uses Mailgun to deliver emails for the [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=readme&utm_term=Mailgun).
 
-Read the [Setup Guide](https://kb.mailster.co/send-your-newsletters-via-mailgun?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster&utm_medium=readme) to get started.
+Read the [Setup Guide](https://kb.mailster.co/send-your-newsletters-via-mailgun?utm_campaign=wporg&utm_source=Mailgun&utm_medium=readme) to get started.
 
 ## Installation
 
@@ -25,36 +25,40 @@ Read the [Setup Guide](https://kb.mailster.co/send-your-newsletters-via-mailgun?
 
 ## Screenshots
 
-### 1. Option Interface.
+### 1. Option Interface
 
-[missing image]
+![Option Interface.](https://ps.w.org/mailster-mailgun/assets/screenshot-1.png)
 
 ## Changelog
 
+### 1.5.1
+
+- fixed: PHP warnings on PHP >8.1
+
 ### 1.5
 
--   Updated for Mailster 3.0
+- Updated for Mailster 3.0
 
 ### 1.4
 
--   fixed php Error notice on PHP >= 7.4
+- fixed php Error notice on PHP >= 7.4
 
 ### 1.3
 
--   added string for subscriber error
+- added string for subscriber error
 
 ### 1.2
 
--   fixed: Undefined variable notice
+- fixed: Undefined variable notice
 
 ### 1.1
 
--   added option to choose EU endpoint
+- added option to choose EU endpoint
 
 ### 1.0
 
--   initial release
+- initial release
 
 ## Additional Info
 
-This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster&utm_medium=readme)
+This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=readme&utm_term=Mailgun)

@@ -4,7 +4,8 @@ class MailsterMailgun {
 
 	private $plugin_path;
 	private $plugin_url;
-
+	private $domain;
+	private $apikey;
 	/**
 	 *
 	 */
@@ -51,7 +52,6 @@ class MailsterMailgun {
 				add_filter( 'mailster_subscriber_errors', array( $this, 'subscriber_errors' ) );
 			}
 		}
-
 	}
 
 
@@ -89,7 +89,6 @@ class MailsterMailgun {
 
 		// Mailgun will handle DKIM integration
 		$mailobject->dkim = false;
-
 	}
 
 
@@ -198,7 +197,6 @@ class MailsterMailgun {
 		}
 
 		$mailobject->mailgun_object = apply_filters( 'mailster_mailgun_object', $mailobject->mailgun_object, $mailobject );
-
 	}
 
 
@@ -275,7 +273,6 @@ class MailsterMailgun {
 		$verified = mailster_option( 'mailgun_verified' );
 
 		include $this->plugin_path . '/views/settings.php';
-
 	}
 
 
@@ -378,7 +375,6 @@ class MailsterMailgun {
 		}
 
 		return $body;
-
 	}
 
 
@@ -400,7 +396,6 @@ class MailsterMailgun {
 		}
 
 		return $response;
-
 	}
 
 
@@ -422,7 +417,6 @@ class MailsterMailgun {
 		$domains = $response->items;
 
 		return $domains;
-
 	}
 
 	/**
@@ -441,7 +435,6 @@ class MailsterMailgun {
 		$accounts = $response->results;
 
 		return $accounts;
-
 	}
 
 
@@ -641,9 +634,9 @@ class MailsterMailgun {
 	public function notice() {
 		?>
 	<div id="message" class="error">
-	  <p>
-	   <strong>Mailgun integration for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=Mailgun+integration+for+Mailster&utm_medium=plugin">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_MAILGUN_REQUIRED_VERSION; ?></strong>.
-	  </p>
+		<p>
+		<strong>Mailgun integration for Mailster</strong> requires the <a href="https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=plugin&utm_term=Mailgun">Mailster Newsletter Plugin</a>, at least version <strong><?php echo MAILSTER_MAILGUN_REQUIRED_VERSION; ?></strong>.
+		</p>
 	</div>
 		<?php
 	}
@@ -701,6 +694,4 @@ class MailsterMailgun {
 			}
 		}
 	}
-
-
 }
